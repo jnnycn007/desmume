@@ -678,7 +678,6 @@ extern struct TCommonSettings
 
 } CommonSettings;
 
-void NDS_RunAdvansceneAutoImport();
 
 extern std::string InputDisplayString;
 extern int LagFrameFlag;

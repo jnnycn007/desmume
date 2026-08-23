@@ -129,20 +129,6 @@ void NDS_SetupDefaultFirmware()
 	NDS_GetDefaultFirmwareConfig(CommonSettings.fwConfig);
 }
 
-void NDS_RunAdvansceneAutoImport()
-{
-	if (CommonSettings.run_advanscene_import != "")
-	{
-		std::string fname = CommonSettings.run_advanscene_import;
-		std::string fname_out = fname + ".ddb";
-		EMUFILE_FILE outf(fname_out,"wb");
-		u32 ret = advsc.convertDB(fname.c_str(),outf);
-		if (ret == 0)
-			exit(0);
-		else exit(1);
-	}
-}
-
 int NDS_Init()
 {
 	nds.idleFrameCounter = 0;
@@ -158,9 +144,6 @@ int NDS_Init()
 		strcpy(buf, path.pathToModule);
 		strcat(buf, "desmume.ddb");							// DeSmuME database	:)
 		advsc.setDatabase(buf);
-
-		//why is this done here? shitty engineering. not intended.
-		NDS_RunAdvansceneAutoImport();
 	}
 	
 	armcpu_new(&NDS_ARM9,0);
