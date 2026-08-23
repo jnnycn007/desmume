@@ -195,7 +195,6 @@ void PathInfo::init(const char *filename)
 
 void PathInfo::LoadModulePath()
 {
-#if defined(__LIBRETRO__)
 		const char *saveDir = 0;
 		environ_cb(RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY, &saveDir);
 #if !defined(VITA)
@@ -220,39 +219,12 @@ void PathInfo::LoadModulePath()
       		}
 
                 return;
-#elif defined(HOST_WINDOWS)
-
-	char *p;
-	ZeroMemory(pathToModule, sizeof(pathToModule));
-
-	GetModuleFileName(NULL, pathToModule, sizeof(pathToModule));
-	p = pathToModule + lstrlen(pathToModule);
-	while (p >= pathToModule && *p != DIRECTORY_DELIMITER_CHAR) p--;
-	if (++p >= pathToModule) *p = 0;
-
-	extern char* _hack_alternateModulePath;
-	if (_hack_alternateModulePath)
-	{
-		strcpy(pathToModule, _hack_alternateModulePath);
-	}
-#elif defined(DESMUME_COCOA)
-	std::string pathStr = Path::GetFileDirectoryPath(path);
-
-	strncpy(pathToModule, pathStr.c_str(), MAX_PATH);
-#else
-	char *cwd = g_build_filename(g_get_user_config_dir(), "desmume", NULL);
-	g_mkdir_with_parents(cwd, 0755);
-	strncpy(pathToModule, cwd, MAX_PATH);
-	g_free(cwd);
-#endif
 }
 
 void PathInfo::GetDefaultPath(char *pathToDefault, const char *key, int maxCount)
 {
-#ifdef __LIBRETRO__
 	strncpy(pathToDefault, pathToModule, maxCount);
 	return;
-#endif
 
 #ifdef HOST_WINDOWS
 	std::string temp = (std::string)"." + DIRECTORY_DELIMITER_CHAR + pathToDefault;
@@ -264,16 +236,8 @@ void PathInfo::GetDefaultPath(char *pathToDefault, const char *key, int maxCount
 
 void PathInfo::ReadKey(char *pathToRead, const char *key)
 {
-#if defined(HOST_WINDOWS) && !defined(__LIBRETRO__)
-	GetPrivateProfileString(SECTION, key, key, pathToRead, MAX_PATH, IniName);
-	if (strcmp(pathToRead, key) == 0) {
-		//since the variables are all intialized in this file they all use MAX_PATH
-		GetDefaultPath(pathToRead, key, MAX_PATH);
-	}
-#else
 	//since the variables are all intialized in this file they all use MAX_PATH
 	GetDefaultPath(pathToRead, key, MAX_PATH);
-#endif
 }
 
 void PathInfo::ReadPathSettings()
@@ -293,17 +257,6 @@ void PathInfo::ReadPathSettings()
 	ReadKey(pathToFirmware, FIRMWAREKEY);
 	ReadKey(pathToLua, LUAKEY);
 	ReadKey(pathToSlot1D, SLOT1DKEY);
-#if defined(HOST_WINDOWS) && !defined(__LIBRETRO__)
-	GetPrivateProfileString(SECTION, FORMATKEY, "%f_%s_%r", screenshotFormat, MAX_FORMAT, IniName);
-	savelastromvisit = GetPrivateProfileBool(SECTION, LASTVISITKEY, true, IniName);
-	currentimageformat = (ImageFormat)GetPrivateProfileInt(SECTION, DEFAULTFORMATKEY, PNG, IniName);
-	r4Format = (R4Format)GetPrivateProfileInt(SECTION, R4FORMATKEY, R4_CHEAT_DAT, IniName);
-	if ((r4Format != R4_CHEAT_DAT) && (r4Format != R4_USRCHEAT_DAT))
-	{
-		r4Format = R4_USRCHEAT_DAT;
-		WritePrivateProfileInt(SECTION, R4FORMATKEY, r4Format, IniName);
-	}
-#endif
 	/*
 	needsSaving		= GetPrivateProfileInt(SECTION, NEEDSSAVINGKEY, TRUE, IniName);
 	if(needsSaving)

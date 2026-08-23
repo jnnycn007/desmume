@@ -3615,9 +3615,6 @@ void FASTCALL _MMU_ARM9_write08(u32 adr, u8 val)
 					if(nds.ensataEmulation)
 					{
 						printf("%c",val);
-						#ifndef __LIBRETRO__
-						fflush(stdout);
-						#endif
 					}
 					break;
 					

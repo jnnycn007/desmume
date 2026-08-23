@@ -67,7 +67,7 @@
 	#define WPCAP
 #endif
 
-#if defined(_WIN32) && defined(__LIBRETRO__)
+#if defined(_WIN32)
 #include "frontend/windows/winpcap/pcap.h"
 #elif defined(HAVE_LIBNX) || defined(__IOS__) || defined(ANDROID) || defined(GEKKO) || defined(_3DS) \
 || defined(__EMSCRIPTEN__) || defined(WEBOS)
@@ -3222,54 +3222,6 @@ void DummyPCapInterface::breakloop(void *dev)
 	// Do nothing.
 }
 
-#if !defined(HOST_WINDOWS) && !defined(__LIBRETRO__)
-
-int POSIXPCapInterface::findalldevs(void **alldevs, char *errbuf)
-{
-	return pcap_findalldevs((pcap_if_t **)alldevs, errbuf);
-}
-
-void POSIXPCapInterface::freealldevs(void *alldevs)
-{
-	pcap_freealldevs((pcap_if_t *)alldevs);
-}
-
-void* POSIXPCapInterface::open(const char *source, int snaplen, int flags, int readtimeout, char *errbuf)
-{
-	return pcap_open_live(source, snaplen, flags, readtimeout, errbuf);
-}
-
-void POSIXPCapInterface::close(void *dev)
-{
-	pcap_close((pcap_t *)dev);
-}
-
-int POSIXPCapInterface::setnonblock(void *dev, int nonblock, char *errbuf)
-{
-	return pcap_setnonblock((pcap_t *)dev, nonblock, errbuf);
-}
-
-int POSIXPCapInterface::sendpacket(void *dev, const void *data, int len)
-{
-	return pcap_sendpacket((pcap_t *)dev, (u_char *)data, len);
-}
-
-int POSIXPCapInterface::dispatch(void *dev, int num, void *callback, void *userdata)
-{
-	if (callback == NULL)
-	{
-		return -1;
-	}
-	
-	return pcap_dispatch((pcap_t *)dev, num, (pcap_handler)callback, (u_char *)userdata);
-}
-
-void POSIXPCapInterface::breakloop(void *dev)
-{
-	pcap_breakloop((pcap_t *)dev);
-}
-
-#endif
 
 WifiCommInterface::WifiCommInterface()
 {
@@ -3796,13 +3748,8 @@ WifiHandler::WifiHandler()
 	
 	_packetCaptureFile = NULL;
 	
-#if !defined(HOST_WINDOWS) && !defined(__LIBRETRO__)
-	_pcap = new POSIXPCapInterface;
-	_isSocketsSupported = true;
-#else
 	_pcap = &dummyPCapInterface;
 	_isSocketsSupported = false;
-#endif
 
 	WIFI_initCRC32Table();
 	Reset();

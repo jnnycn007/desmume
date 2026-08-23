@@ -20,16 +20,9 @@
 #include <string.h>
 #include "types.h"
 
-#if !defined(__LIBRETRO__) && defined(HOST_WINDOWS)
-	#define WIN32_LEAN_AND_MEAN
-	#include <windows.h>
-	#include <direct.h>
-
-		#include "frontend/windows/winutil.h"
-		#include "frontend/windows/resource.h"
-#elif !defined(DESMUME_COCOA)
+#if !defined(DESMUME_COCOA)
         #include "libretro-common/include/file/file_path.h"
-#endif /* HOST_WINDOWS */
+#endif
 
 #include "time.h"
 
@@ -43,11 +36,9 @@
 	#define ALL_DIRECTORY_DELIMITER_STRING "/"
 #endif
 
-#ifdef __LIBRETRO__
 #include "libretro-common/include/libretro.h"
 extern retro_log_printf_t log_cb;
 extern retro_environment_t environ_cb;
-#endif
 
 #ifdef HOST_WINDOWS
 void FCEUD_MakePathDirs(const char *fname);

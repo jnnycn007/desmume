@@ -1518,9 +1518,6 @@ public:
 											}
 
 	/** Write the document to standard out using formatted printing ("pretty print"). */
-#ifndef __LIBRETRO__
-	void Print() const						{ Print( stdout, 0 ); }
-#endif
 
 	/* Write the document to a string using formatted printing ("pretty print"). This
 		will allocate a character array (new char[]) and return it as a pointer. The

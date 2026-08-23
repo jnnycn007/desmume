@@ -18,7 +18,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if !defined(_WIN32) || defined(__LIBRETRO__)
 
 #include <stdlib.h>
 #include "mic.h"
@@ -216,4 +215,3 @@ bool mic_loadstate(EMUFILE &is, int size)
 	return TRUE;
 }
 
-#endif
