@@ -598,8 +598,8 @@ ifneq (,$(findstring win,$(platform)))
 	LIBS += -lws2_32
     endif
 
-   CFLAGS += -I$(CORE_DIR)/frontend/windows/winpcap
-   CXXFLAGS += -I$(CORE_DIR)/frontend/windows/winpcap
+   CFLAGS += -I$(CORE_DIR)/winpcap
+   CXXFLAGS += -I$(CORE_DIR)/winpcap
 endif
 
 include Makefile.common

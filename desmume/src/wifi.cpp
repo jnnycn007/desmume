@@ -33,7 +33,7 @@
 	#include <ws2tcpip.h>
 	#define socket_t    SOCKET
 	#define sockaddr_t  SOCKADDR
-	#include "frontend/windows/windriver.h"
+	#include "windriver.h"
 	#define PCAP_DEVICE_NAME description
 #else
 	#include <unistd.h>
@@ -68,7 +68,7 @@
 #endif
 
 #if defined(_WIN32)
-#include "frontend/windows/winpcap/pcap.h"
+#include "winpcap/pcap.h"
 #elif defined(HAVE_LIBNX) || defined(__IOS__) || defined(ANDROID) || defined(GEKKO) || defined(_3DS) \
 || defined(__EMSCRIPTEN__) || defined(WEBOS)
 #define NO_PCAP
