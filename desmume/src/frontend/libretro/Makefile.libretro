@@ -570,7 +570,7 @@ else
    CC ?= gcc
    CXX ?= g++
    CFLAGS += -DHAVE_OPENGL -fno-strict-aliasing
-   CXXFLAGS += -DHAVE_OPENGL -fno-strict-aliasing
+   CXXFLAGS += -DHAVE_OPENGL -fno-strict-aliasing -std=gnu++17
    LIBS += -lopengl32
    SHARED := -shared -static-libgcc -static-libstdc++ -Wl,--version-script=$(CORE_DIR)/frontend/libretro/link.T
    ifeq ($(DEBUG), 0)
